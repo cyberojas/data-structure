@@ -1,124 +1,79 @@
 #include<stdio.h>
-#include<conio.h>
 #include<stdbool.h>
-int queue[10];
-int size_max=10;
-int front;
-int rear;
+
+int queue[5];        // Define the queue array
+int size_max = 5;    // Maximum size of the queue
+int front = -1;      // Front index of the queue
+int rear = -1;       // Rear index of the queue
+
 void enqueue(int element);
 void dequeue();
 int getfront();
 int getrear();
 void viewqueue();
-bool isfull();
-bool isempty();
+
+int main() {
+    front = -1;
+    rear = -1;
+
+    // Enqueue elements
+    enqueue(10);
+    enqueue(20);
+    enqueue(30);
+    enqueue(40);
+    enqueue(50); // Queue is full after this
+
+    // Dequeue an element
+    dequeue();
+    enqueue(99); // This should fail as queue is full after dequeuing just one element
 
 
-int main()
-{
-	front=-1;
-	rear=-1;
-		
-		
-        	enqueue(10);
-	    	enqueue(20);
-			enqueue(30);
-			enqueue(40);
-			enqueue(50);
-				dequeue();
-			int a=getfront();
-			int b=getrear();
-			printf("\n Front element is = %0d",a);
-			printf("\n Rear element is = %0d",b);
-			viewqueue();
-			return 0;
+    // View the entire queue
+    viewqueue();
+
+    return 0;
 }
 
-void enqueue(int element)
-{
-	if(rear==-1 && front==-1)
-	{
-		rear=0;
-		front=0;
-		queue[rear]=element;
-		printf("\n enqueue %d",queue[rear]);
-	}
-	else if(rear==size_max-1 && front==0)
-	{
-		printf("\n queue is full");
-	}
-	else if(rear==size_max-1 && front!=0)
-	{
-		rear=0;
-		queue[rear]=element;
-		printf("\n enqueue %d",queue[rear]);
-	}
-	else
-	{
-		rear=rear+1;
-		queue[rear]=element;
-		printf("\n enqueue %d",queue[rear]);
-	}
 
-}
-
-void dequeue()
-{
-	if(front==-1)
-	{
-		printf("\n queue is empty..");
-	}
-	else
-	{
-		printf("\n dequeue %d",queue[front]);
-		queue[front]=0;
-		if(front==rear)
-		{
-			front=-1;
-			rear=-1;
-		}
-		else if(front==size_max-1)
-		{
-			front=0;
-		}
-		else
-		{
-			front=front+1;
-		}
-	}
-}
-
-int getfront()
-{
-	int x=queue[front];
-	return x;
-}
-
-int getrear()
-{
-	int y=queue[rear];
-	return y;
-}
-
-void viewqueue()
-{
-
- if (rear >= front) {
- 	
- 	printf("\n Queue Elements are :");
-            for (int i = front; i <= rear; i++) {
-                printf("%d ", queue[i]);
-            }
-        } else {
-            
-            for (int i = front; i < size_max; i++) {
-                printf("%d ", queue[i]);
-            }
-            
-            for (int i = 0; i <= rear; i++) {
-                printf("%d ", queue[i]);
-            }
+void enqueue(int element) {
+    if (rear == size_max - 1) {  // Check if the queue is full
+        printf("\nQueue is full");
+    } else {
+        if (front == -1) {       // If the queue is empty, set front to 0
+            front = 0;
         }
-        printf("\n");
+        rear++;                  // Increment rear to add a new element
+        queue[rear] = element;
+        printf("\nEnqueue %d", queue[rear]);
+    }
+}
+
+
+void dequeue() {
+    if (front == -1) {  // Check if the queue is empty
+        printf("\nQueue is empty..");
+    } else {
+        printf("\nDequeue %d", queue[front]);
+        queue[front] = 0;  // Optional: Reset the dequeued position to 0
+
+        front++;  // Move front to the next element
+
+    }
+}
+
+
+
+
+// Function to display the elements of the queue
+void viewqueue() {
+    if (front == -1) {
+        printf("\nQueue is empty.");
+        return;
     }
 
+    printf("\nQueue elements are: ");
+    for (int i = front; i <= rear; i++) {
+        printf("%d ", queue[i]);
+    }
+    printf("\n");
+}
