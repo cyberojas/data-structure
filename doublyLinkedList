@@ -1,0 +1,90 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node* next;
+    struct Node* prev;
+};
+
+// Function to insert node at the end of the doubly linked list
+void insertNode(struct Node** head, int value) {
+    // Create a new node
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = value;
+    newNode->next = NULL;
+    newNode->prev = NULL;
+
+    // If the list is empty, make the new node the head
+    if (*head == NULL) {
+        *head = newNode;
+    } else {
+        // Traverse to the last node
+        struct Node* temp = *head;
+        while (temp->next != NULL) {
+            temp = temp->next;  // Move to the last node
+        }
+        // Update the last node's next pointer to the new node
+        temp->next = newNode;
+        // Set the new node's prev pointer to the last node
+        newNode->prev = temp;
+    }
+}
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+DELETE first NOde from DOUBLY Linked list
+
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node* next;
+    struct Node* prev;
+};
+
+// Function to delete the first node from the doubly linked list
+void deleteFirstNode(struct Node** head) {
+    // Check if the list is empty
+    if (*head == NULL) {
+        printf("The list is already empty!\n");
+        return;
+    }
+
+    // Save the reference to the current head node
+    struct Node* temp = *head;
+
+    // If there is only one node in the list
+    if (*head == (*head)->next) {
+        free(temp);  // Free the only node
+        *head = NULL;  // Set head to NULL as the list is now empty
+    } else {
+        // If there are more than one nodes
+        *head = (*head)->next;  // Update the head to the second node
+        (*head)->prev = NULL;  // Set the prev pointer of the new head to NULL
+        free(temp);  // Free the memory of the old head node
+    }
+}
+
+
+//-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+Display list :
+
+
+
+void displayList(struct Node* head) {
+    if (head == NULL) {
+        printf("The list is empty.\n");
+        return;
+    }
+
+    struct Node* temp = head;
+    printf("List: ");
+    while (temp != NULL) {
+        printf("%d -> ", temp->data);
+        temp = temp->next;
+    }
+    printf("NULL\n");
+}
