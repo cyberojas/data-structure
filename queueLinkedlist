@@ -1,0 +1,106 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+// Structure to represent the queue
+struct Queue {
+    struct Node* front;
+    struct Node* rear;
+};
+
+// Function to create a new queue
+struct Queue* createQueue() {
+    struct Queue* queue = (struct Queue*)malloc(sizeof(struct Queue));
+    queue->front = NULL;
+    queue->rear = NULL;
+    return queue;
+}
+
+// Function to enqueue (insert) an element
+void enqueue(struct Queue* queue, int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    if (newNode == NULL) {
+        printf("Queue overflow\n");
+        return;
+    }
+    newNode->data = data;
+    newNode->next = NULL;
+
+    // If the queue is empty, both front and rear are the new node
+    if (queue->rear == NULL) {
+        queue->front = newNode;
+        queue->rear = newNode;
+    } else {
+        // Add the new node at the rear and update the rear pointer
+        queue->rear->next = newNode;
+        queue->rear = newNode;
+    }
+
+    printf("Enqueued %d into the queue.\n", data);
+}
+
+// Function to dequeue (delete) an element
+int dequeue(struct Queue* queue) {
+    // Check if the queue is empty
+    if (queue->front == NULL) {
+        printf("Queue underflow\n");
+        return -1;
+    }
+
+    // Remove the front node
+    struct Node* temp = queue->front;
+    int dequeuedData = temp->data;
+    queue->front = queue->front->next;
+
+    // If the queue becomes empty, update the rear pointer
+    if (queue->front == NULL) {
+        queue->rear = NULL;
+    }
+
+    free(temp);
+    return dequeuedData;
+}
+
+// Function to display the queue
+void displayQueue(struct Queue* queue) {
+    if (queue->front == NULL) {
+        printf("Queue is empty\n");
+        return;
+    }
+
+    struct Node* temp = queue->front;
+    printf("Queue elements: ");
+    while (temp != NULL) {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    }
+    printf("\n");
+}
+
+// Main function to test the queue implementation
+int main() {
+    struct Queue* queue = createQueue();
+
+    enqueue(queue, 10);
+    enqueue(queue, 20);
+    enqueue(queue, 30);
+
+    displayQueue(queue);
+
+    printf("Dequeued: %d\n", dequeue(queue));
+    displayQueue(queue);
+
+    enqueue(queue, 40);
+    displayQueue(queue);
+
+    printf("Dequeued: %d\n", dequeue(queue));
+    printf("Dequeued: %d\n", dequeue(queue));
+    printf("Dequeued: %d\n", dequeue(queue));
+    printf("Dequeued: %d\n", dequeue(queue)); // Should show underflow
+
+    return 0;
+}
